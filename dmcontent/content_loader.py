@@ -223,10 +223,14 @@ class ContentSection(object):
         ]
 
     def get_question_ids(self, type=None):
-        # FIXME should this ever return self.id?
+        # Returns all the question ids, including the subsection and sub-subsection's questions.
         return [
             question_id for question in self.questions for question_id in question.get_question_ids(type)
         ]
+
+    def get_section_question_ids(self):
+        # Returns the section's question ids, excluding the subsection and sub-subsection's questions.
+        return [question.id for question in self.questions]
 
     def get_data(self, form_data):
         """Extract data for a section from a submitted form
