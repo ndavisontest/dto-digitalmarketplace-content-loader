@@ -5,13 +5,13 @@ import pytest
 
 def test_format_price():
     cases = [
-        ((u'12', None, 'Unit', None), u'£12 per unit'),
-        (('12', '13', 'Unit', None), u'£12 to £13 per unit'),
-        (('12', '13', 'Unit', 'Second'), u'£12 to £13 per unit per second'),
-        (('12', None, 'Unit', 'Second'), u'£12 per unit per second'),
-        ((12, 13, 'Unit', None), u'£12 to £13 per unit'),
-        (('34', None, 'Lab', None, '4 hours'), u'4 hours for £34'),
-        (('12', None, None, None), u'£12'),
+        ((u'£', u'12', None, 'Unit', None), u'£12 per unit'),
+        ((u'£', '12', '13', 'Unit', None), u'£12 to £13 per unit'),
+        ((u'£', '12', '13', 'Unit', 'Second'), u'£12 to £13 per unit per second'),
+        ((u'£', '12', None, 'Unit', 'Second'), u'£12 per unit per second'),
+        ((u'£', 12, 13, 'Unit', None), u'£12 to £13 per unit'),
+        ((u'£', '34', None, 'Lab', None, '4 hours'), u'4 hours for £34'),
+        ((u'£', '12', None, None, None), u'£12'),
     ]
 
     def check_price_formatting(args, formatted_price):
@@ -23,7 +23,7 @@ def test_format_price():
 
 def test_format_price_errors():
     cases = [
-        (None, None, None, None),
+        (None, None, None, None, None),
     ]
 
     def check_price_formatting(case):
