@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
 
-def format_price(min_price, max_price, unit, interval, hours_for_price=None):
+def format_price(currency_symbol, min_price, max_price, unit, interval, hours_for_price=None):
     """Format a price string"""
     if hours_for_price:
-        return u'{} for £{}'.format(hours_for_price, min_price)
+        return u'{} for {}{}'.format(hours_for_price, currency_symbol, min_price)
 
     if min_price is None:
         raise TypeError('min_price should be string or integer, not None')
-    formatted_price = u'£{}'.format(min_price)
+    formatted_price = u'{}{}'.format(currency_symbol, min_price)
     if max_price:
-        formatted_price += u' to £{}'.format(max_price)
+        formatted_price += u' to {}{}'.format(currency_symbol, max_price)
     if unit:
         formatted_price += ' per ' + unit.lower()
     if interval:
@@ -18,7 +18,7 @@ def format_price(min_price, max_price, unit, interval, hours_for_price=None):
     return formatted_price
 
 
-def format_service_price(service):
+def format_service_price(service, currency_symbol=u'£'):
     """Format a price string from a service dictionary
 
     :param service: a service dictionary, returned from data API
@@ -29,6 +29,7 @@ def format_service_price(service):
     if not service.get('priceMin'):
         return ''
     return format_price(
+        currency_symbol,
         service.get('priceMin'),
         service.get('priceMax'),
         service.get('priceUnit'),
