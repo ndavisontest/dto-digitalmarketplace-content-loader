@@ -209,7 +209,7 @@ class Pricing(Question):
         self.fields = data['fields']
 
     def summary(self, service_data):
-        raise NotImplementedError()
+        return PricingSummary(self, service_data)
 
     def get_question(self, field_name):
         if self.id == field_name or field_name in self.fields.values():
@@ -234,14 +234,6 @@ class Pricing(Question):
             return [self.fields[key] for key in self['optional_fields']]
 
         return []
-
-
-def pricing_factory(name, currency_symbol):
-    class Impl(Pricing):
-        def summary(self, service_data):
-            return PricingSummary(self, service_data, currency_symbol)
-    Impl.__name__ = 'Pricing' + name.encode('utf-8')
-    return Impl
 
 
 class List(Question):
@@ -353,14 +345,14 @@ class MultiquestionSummary(QuestionSummary, Multiquestion):
 
 
 class PricingSummary(QuestionSummary, Pricing):
-    def __init__(self, question, service_data, currency_symbol):
+    def __init__(self, question, service_data):
         super(PricingSummary, self).__init__(question, service_data)
         self.fields = question.fields
-        self.currency_symbol = currency_symbol
 
     @property
     def value(self):
         price = self._service_data.get(self.fields.get('price'))
+        currency_symbol = self._service_data.get(self.fields.get('symbol'), u'£')
         minimum_price = self._service_data.get(self.fields.get('minimum_price'))
         maximum_price = self._service_data.get(self.fields.get('maximum_price'))
         price_unit = self._service_data.get(self.fields.get('price_unit'),
@@ -372,7 +364,7 @@ class PricingSummary(QuestionSummary, Pricing):
 
         if price or minimum_price:
             return format_price(
-                self.currency_symbol,
+                currency_symbol,
                 price or minimum_price,
                 maximum_price,
                 price_unit,
@@ -400,9 +392,7 @@ class ListSummary(QuestionSummary, List):
 
 QUESTION_TYPES = {
     'multiquestion': Multiquestion,
-    'pricing': pricing_factory(u'GBP', u'£'),  # deprecated
-    'pricing_gbp': pricing_factory(u'GBP', u'£'),
-    'pricing_aud': pricing_factory(u'AUD', u'$'),
+    'pricing': Pricing,
     'list': List,
     'checkboxes': List,
 }
