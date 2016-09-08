@@ -3,4 +3,4 @@
 set -ex
 
 pep8 .
-py.test
+py.test tests/
