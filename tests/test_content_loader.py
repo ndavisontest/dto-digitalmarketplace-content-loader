@@ -669,6 +669,51 @@ class TestContentSection(object):
         })
         assert section.has_summary_page is True
 
+    def test_get_simple_string_description(self):
+        section = ContentSection.create({
+            'slug': 'first_section',
+            'name': 'First section',
+            'description': 'description',
+            'questions': [{
+                'id': 'q1',
+                'question': 'Boolean question',
+                'type': 'boolean',
+            }]
+        })
+        assert section.get_description_for_lot('a_lot') == 'description'
+
+    def test_get_compound_description(self):
+        section = ContentSection.create({
+            'slug': 'first_section',
+            'name': 'First section',
+            'description': {
+                'default': 'wrong',
+                'a_lot': 'description',
+            },
+            'questions': [{
+                'id': 'q1',
+                'question': 'Boolean question',
+                'type': 'boolean',
+            }]
+        })
+        assert section.get_description_for_lot('a_lot') == 'description'
+
+    def test_get_compound_description_default(self):
+        section = ContentSection.create({
+            'slug': 'first_section',
+            'name': 'First section',
+            'description': {
+                'default': 'description',
+                'some_other_lot': 'wrong',
+            },
+            'questions': [{
+                'id': 'q1',
+                'question': 'Boolean question',
+                'type': 'boolean',
+            }]
+        })
+        assert section.get_description_for_lot('a_lot') == 'description'
+
     def test_get_question_ids(self):
         section = ContentSection.create({
             "slug": "first_section",

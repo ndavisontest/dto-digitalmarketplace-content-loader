@@ -326,6 +326,11 @@ class ContentSection(object):
             if question.get('slug') == question_slug:
                 return question
 
+    def get_description_for_lot(self, lot_slug):
+        if hasattr(self.description, 'get'):
+            return self.description.get(lot_slug, self.description.get('default'))
+        return self.description
+
     def inject_brief_questions_into_boolean_list_question(self, brief):
         for question in self.questions:
             question.inject_brief_questions_into_boolean_list_question(brief)
