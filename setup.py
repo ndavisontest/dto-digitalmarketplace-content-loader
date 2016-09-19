@@ -16,9 +16,9 @@ requirements = list(parse_requirements('requirements.txt', session=pip.download.
 install_requires = [str(r.req) for r in requirements]
 
 setup(
-    name='digitalmarketplace-content-loader',
+    name='dto-digitalmarketplace-content-loader',
     version=version,
-    url='https://github.com/alphagov/digitalmarketplace-content-loader',
+    url='https://github.com/AusDTO/dto-digitalmarketplace-content-loader',
     license='MIT',
     author='GDS Developers',
     description='Digital Marketplace Content Loader',
