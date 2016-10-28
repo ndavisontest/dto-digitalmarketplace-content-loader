@@ -1316,6 +1316,35 @@ class TestContentSection(object):
             base_error_key, index = error_key.split('-')[0], int(error_key.split('-')[-1])
             assert brief['briefs'][base_error_key][index] == error_messages[error_key]['question']
 
+    def test_get_error_messages_for_text_friendly_boolean_list_one_question_missing(self):
+
+        section, brief, form_data = self.setup_for_boolean_list_tests()
+
+        form_data = OrderedMultiDict([
+            ('q0-0', 'zero'),
+            ('q0-1', 'one'),
+            ('q0-2', 'two'),
+            ('q0-3', '')
+        ])
+
+        errors = {"q0": "boolean_list_error"}
+
+        section = ContentSection.create(section)
+        section.inject_brief_questions_into_boolean_list_question(brief['briefs'])
+        response_data = section.get_data(form_data)
+        section_summary = section.summary(response_data)
+        error_messages = section_summary.get_error_messages(errors)
+
+        assert error_messages['q0'] is True
+
+        for error_key in ['q0-3']:
+            assert error_key in error_messages
+            base_error_key, index = error_key.split('-')[0], int(error_key.split('-')[-1])
+            assert brief['briefs'][base_error_key][index] == error_messages[error_key]['question']
+
+        for ok_key in ['q0-0', 'q0-1', 'q0-2']:
+            assert ok_key not in error_messages
+
     def test_get_error_messages_for_boolean_list_all_questions_missing(self):
 
         section, brief, form_data = self.setup_for_boolean_list_tests()

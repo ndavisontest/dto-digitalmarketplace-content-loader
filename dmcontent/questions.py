@@ -281,13 +281,26 @@ class QuestionSummary(Question):
             boolean_list_values.extend([None] * (len(boolean_list_questions) - len(boolean_list_values)))
 
             for index, boolean_list_question in enumerate(boolean_list_questions):
-                if not isinstance(boolean_list_values[index], bool):
+                value = boolean_list_values[index]
+
+                if isinstance(value, basestring):
+                    if not value:
+                        boolean_question_id = "{}-{}".format(self.id, index)
+                        question_errors[boolean_question_id] = {
+                            'input_name': boolean_question_id,
+                            'message': question_errors[self.id]['message'],
+                            'question': boolean_list_question,
+                            'value': value
+                        }
+
+                elif not isinstance(boolean_list_values[index], bool):
                     # Each non-boolean value is an error
                     boolean_question_id = "{}-{}".format(self.id, index)
                     question_errors[boolean_question_id] = {
                         'input_name': boolean_question_id,
                         'message': question_errors[self.id]['message'],
-                        'question': boolean_list_question
+                        'question': boolean_list_question,
+                        'value': value
                     }
 
             question_errors[self.id] = True
