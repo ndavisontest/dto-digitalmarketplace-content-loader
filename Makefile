@@ -10,6 +10,11 @@ requirements: virtualenv requirements.txt
 requirements_for_test: virtualenv requirements_for_test.txt
 	${VIRTUALENV_ROOT}/bin/pip install -r requirements_for_test.txt
 
+requirements_freeze:
+	${VIRTUALENV_ROOT}/bin/pip install --upgrade pip
+	${VIRTUALENV_ROOT}/bin/pip install --upgrade -r requirements_for_test.txt
+	${VIRTUALENV_ROOT}/bin/pip freeze | grep -v content-loader > requirements.txt
+
 test: test_pep8 test_python
 
 test_pep8: virtualenv
