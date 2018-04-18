@@ -1,7 +1,5 @@
 import re
 import ast
-import pip.download
-from pip.req import parse_requirements
 from setuptools import setup, find_packages
 
 setup(
