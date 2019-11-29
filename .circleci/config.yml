@@ -20,7 +20,7 @@ jobs:
           paths:
             - venv
       - run:
-        command: env
+        command: id
       - run: 
           name: Check Styles
           command: |
