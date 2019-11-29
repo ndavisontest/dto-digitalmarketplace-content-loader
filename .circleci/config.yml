@@ -19,6 +19,8 @@ jobs:
           key: venv-cache-{{ checksum "requirements.txt" }}-{{ checksum "requirements_for_test.txt" }}
           paths:
             - venv
+      - run:
+        command: env
       - run: 
           name: Check Styles
           command: |
